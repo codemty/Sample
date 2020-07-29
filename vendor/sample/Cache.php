@@ -4,7 +4,7 @@ namespace sample;
 
 
 /**
- * 缓存类
+ * 框架缓存类
  */
 class Cache
 {

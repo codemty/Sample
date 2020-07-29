@@ -81,7 +81,7 @@ class Exception extends \Exception
 	 */
 	public function __toString()
 	{
-
+		return $this->getFile().'|'.$this->getLine().'|'.$this->getMessage();
 	}
 
 

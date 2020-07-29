@@ -1,7 +1,8 @@
 <?php
 namespace sample;
 
-
+use sample\Response;
+use sample\Exception;
 
 /**
  * 框架的应用类
@@ -12,32 +13,38 @@ class Sample
 	
 
 
-	public function __construct()
-	{
-        
-	}
 
 
-
-
-
+	/**
+	 * 
+	 * @Author   Tangy                    <1622305313@qq.com>
+	 * @DateTime 2020-07-29T18:08:05+0800
+	 * @version  [version]
+	 * @return   [type]                   [description]
+	 */
 	public function run()
 	{
-        try {
-            var_dump($_SERVER);exit();
-        } catch (Exception $e) {
-        	
-        }
-        return $this;
+
+
+
+		return $this;
 	}
 
 
-	public function send()
+	/**
+	 * 
+	 * @Author   Tangy                    <1622305313@qq.com>
+	 * @DateTime 2020-07-29T18:08:02+0800
+	 * @version  [version]
+	 * @return   [type]                   [description]
+	 */
+	public function send(Response $response)
 	{
-        echo "send function";
+
+
+		
+
 	}
-
-
 
 }
 
