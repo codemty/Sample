@@ -1,6 +1,7 @@
 <?php
 namespace sample;
 
+use sample\Request;
 use sample\Response;
 use sample\Exception;
 
@@ -25,6 +26,23 @@ class Sample
 	public function run()
 	{
 
+		//实例化必须的对象
+
+		try {
+			$request = Request::instance();
+			var_dump($request);
+
+
+
+
+
+
+
+		} catch (Exception $e) {
+			
+		}
+
+
 
 
 		return $this;
@@ -38,11 +56,11 @@ class Sample
 	 * @version  [version]
 	 * @return   [type]                   [description]
 	 */
-	public function send(Response $response)
+	public function send()
 	{
 
 
-		
+
 
 	}
 
