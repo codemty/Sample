@@ -20,18 +20,13 @@ class Request
 
 	protected $post;
 
-
-
-
-
-
 	protected $method;
 
 	protected $domain;
 
 	protected $params;
 
-	protected $protocol;
+	protected $global_server;
 
 
 	protected static $instance = null;
@@ -54,24 +49,13 @@ class Request
 	protected function init()
 	{
 
-		var_dump($_GET);
-		var_dump($_POST);
-		var_dump($_REQUEST);
-		var_dump($_SERVER);
-		var_dump($_ENV);
+		$this->get           = $_GET;
 
+		$this->post          = $_POST;
 
+		$this->params        = $_REQUEST;
 
-		$this->get    = $_GET;
-
-
-		$this->post   = $_POST;
-
-		$this->params = $_REQUEST;
-
-
-
-
+		$this->global_server = $_SERVER;
 	}
 
 
@@ -90,13 +74,6 @@ class Request
 		}
 		return self::$instance;
 	}
-
-
-
-
-
-
-
 
 	/**
 	 * 获取变量值
@@ -131,8 +108,40 @@ class Request
 	}
 
 
+
 	/**
-	 * 返回请求方式
+	 * 请求通信协议
+	 * @Author   Tangy                    <1622305313@qq.com>
+	 * @DateTime 2020-07-31T11:15:03+0800
+	 * @version  [version]
+	 * @return   [type]                   [description]
+	 */
+	public function protocol()
+	{	
+		return $this->global_server['SERVER_PROTOCOL'];
+	}
+
+	/**
+	 * 覆盖或设置请求参数
+	 * @Author   Tangy                    <1622305313@qq.com>
+	 * @DateTime 2020-07-30T14:26:40+0800
+	 * @version  [version]
+	 * @return   [type]                   [description]
+	 */
+	public function request($name, $value)
+	{
+		if (is_array($name) && !empty($name)) {
+			
+			$this->params = array_merge($this->params,$name);
+		} elseif()
+
+
+
+
+	}
+
+	/**
+	 * 当前请求方式
 	 * @Author   Tangy                    <1622305313@qq.com>
 	 * @DateTime 2020-07-30T14:21:15+0800
 	 * @version  [version]
@@ -141,11 +150,42 @@ class Request
 	public function  method($origin = false)
 	{
 		if ($origin) {
-			return $_SERVER['REQUEST_METHOD'];
+			return $this->global_server['REQUEST_METHOD'] ? :'GET';
 		}
 
-	}
 
+
+
+
+
+		return $this->method;
+
+		 if ($origin) {
+            // 获取原始请求类型
+            return $this->server('REQUEST_METHOD') ?: 'GET';
+        } elseif (!$this->method) {
+            if (isset($_POST[$this->config['var_method']])) {
+                $method = strtolower($_POST[$this->config['var_method']]);
+                if (in_array($method, ['get', 'post', 'put', 'patch', 'delete'])) {
+                    $this->method    = strtoupper($method);
+                    $this->{$method} = $_POST;
+                } else {
+                    $this->method = 'POST';
+                }
+                unset($_POST[$this->config['var_method']]);
+            } elseif ($this->server('HTTP_X_HTTP_METHOD_OVERRIDE')) {
+                $this->method = strtoupper($this->server('HTTP_X_HTTP_METHOD_OVERRIDE'));
+            } else {
+                $this->method = $this->server('REQUEST_METHOD') ?: 'GET';
+            }
+        }
+
+        return $this->method;
+    }
+
+
+
+	}
 
 	/**
 	 * 是否为GET请求
@@ -159,7 +199,6 @@ class Request
 		return $this->method() == 'GET';
 	}
 
-
 	/**
 	 * 请求方式是否为Post
 	 * @Author   Tangy                    <1622305313@qq.com>
@@ -171,7 +210,6 @@ class Request
 	{
 		return $this->method() == 'POST';
 	}
-	
 
 	/**
 	 * 是否为PUT请求
@@ -185,7 +223,6 @@ class Request
 		return $this->method() == 'PUT';
 	}
 
-
 	/**
 	 * 是否为Delete请求
 	 * @Author   Tangy                    <1622305313@qq.com>
@@ -197,7 +234,6 @@ class Request
 	{
 		return $this->method() == 'DELETE';
 	}
-
 
 	/**
 	 * 是否为Head请求
@@ -223,30 +259,37 @@ class Request
 		return $this->method() == 'OPTIONS';
 	}
 
-	/**
-	 * 
-	 * @Author   Tangy                    <1622305313@qq.com>
-	 * @DateTime 2020-07-30T14:26:40+0800
-	 * @version  [version]
-	 * @return   [type]                   [description]
-	 */
-	public function request()
-	{
 
+	/**
+	 * 是否cli模式
+	 * PHP_SAPI同php_sapi_name()，返回接口类型的小写字符
+	 * @Author   Tangy                    <1622305313@qq.com>
+	 * @DateTime 2020-07-31T11:06:54+0800
+	 * @version  [version]
+	 * @return   boolean                  [description]
+	 */
+	public function isCli()
+	{
+		return PHP_SAPI == 'cli';
 	}
 
 
 	/**
-	 * 协议信息
+	 * 是否cgi模式
 	 * @Author   Tangy                    <1622305313@qq.com>
-	 * @DateTime 2020-07-30T14:29:43+0800
+	 * @DateTime 2020-07-31T11:07:18+0800
 	 * @version  [version]
-	 * @return   [type]                   [description]
+	 * @return   boolean                  [description]
 	 */
-	public function protocol()
+	public function isCgi()
 	{
-
+		return strpos(PHP_SAPI, 'cgi') === 0;
 	}
+
+
+
+
+	
 
 
 	/**
