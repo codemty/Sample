@@ -13,11 +13,7 @@ class Cookie
 	
 	
 
+	
 
 
-
-	public function __construct()
-	{
-		
-	}
 }
