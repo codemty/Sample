@@ -123,6 +123,7 @@ class Request
 
 	/**
 	 * 覆盖或设置请求参数
+	 * 通过这个方法只能通过
 	 * @Author   Tangy                    <1622305313@qq.com>
 	 * @DateTime 2020-07-30T14:26:40+0800
 	 * @version  [version]
