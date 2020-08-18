@@ -1,9 +1,11 @@
 <?php
 namespace sample;
 
-use sample\Request;
-use sample\Response;
-use sample\Exception;
+// use sample\Request;
+// use sample\Response;
+// use sample\Exception;
+use sample\Facade;
+
 
 /**
  * 框架的应用类
@@ -29,8 +31,7 @@ class Sample
 		//实例化必须的对象
 
 		try {
-			$request = Request::instance();
-			var_dump($request);
+			Facade::name();exit();
 
 
 
